@@ -1,0 +1,4 @@
+requests>=2.31.0
+feedparser>=6.0.11
+gspread>=6.0.0
+google-auth>=2.30.0
