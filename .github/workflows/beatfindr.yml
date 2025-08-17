@@ -29,7 +29,7 @@ jobs:
           GOOGLE_CREDS_JSON: ${{ secrets.GOOGLE_CREDS_JSON }}
           SPREADSHEET_NAME:  ${{ secrets.SPREADSHEET_NAME }}
           GMAIL_USER:        ${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASSWORD:${{ secrets.GMAIL_APP_PASSWORD }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           EMAIL_TO:          ${{ secrets.EMAIL_TO }}
         run: |
           echo "DEBUG: starting workflow run"
