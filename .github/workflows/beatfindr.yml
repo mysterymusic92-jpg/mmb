@@ -2,19 +2,20 @@ name: BeatFindr (email every 6 hours)
 
 on:
   schedule:
-    - cron: "0 */6 * * *"   # every 6 hours
-  workflow_dispatch:         # allow manual runs
+    - cron: '0 */6 * * *'   # every 6 hours
+  workflow_dispatch:        # allow manual runs
 
 jobs:
   run-beatfindr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.13'   # use an explicit version
+          python-version: '3.13'  # explicit version
 
       - name: Install dependencies
         run: |
@@ -24,7 +25,7 @@ jobs:
 
       - name: Run BeatFindr
         env:
-          PYTHONUNBUFFERED: "1"            # force immediate log prints
+          PYTHONUNBUFFERED: '1'  # force immediate prints
           GOOGLE_CREDS_JSON: ${{ secrets.GOOGLE_CREDS_JSON }}
           SPREADSHEET_NAME:  ${{ secrets.SPREADSHEET_NAME }}
           GMAIL_USER:        ${{ secrets.GMAIL_USER }}
