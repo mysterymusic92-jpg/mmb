@@ -14,18 +14,33 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.13'   # use an explicit version
 
       - name: Install dependencies
         run: |
+          python -V
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run BeatFindr
         env:
+          PYTHONUNBUFFERED: "1"            # force immediate log prints
           GOOGLE_CREDS_JSON: ${{ secrets.GOOGLE_CREDS_JSON }}
-          SPREADSHEET_NAME: ${{ secrets.SPREADSHEET_NAME }}
-          GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
-          EMAIL_TO: ${{ secrets.EMAIL_TO }}
-        run: python main.py
+          SPREADSHEET_NAME:  ${{ secrets.SPREADSHEET_NAME }}
+          GMAIL_USER:        ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD:${{ secrets.GMAIL_APP_PASSWORD }}
+          EMAIL_TO:          ${{ secrets.EMAIL_TO }}
+        run: |
+          echo "DEBUG: starting workflow run"
+          python - <<'PY'
+import os, sys
+print("DEBUG: Preflight")
+print("DEBUG: SPREADSHEET_NAME =", os.environ.get("SPREADSHEET_NAME"))
+print("DEBUG: GOOGLE_CREDS_JSON length =", len(os.environ.get("GOOGLE_CREDS_JSON","")))
+print("DEBUG: EMAIL_TO =", os.environ.get("EMAIL_TO"))
+print("DEBUG: GMAIL_USER =", os.environ.get("GMAIL_USER"))
+print("DEBUG: launching main.py")
+sys.stdout.flush()
+PY
+          python main.py
+          echo "DEBUG: main.py finished"
