@@ -15,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'  # explicit version
+          python-version: '3.13'
 
       - name: Install dependencies
         run: |
@@ -25,7 +25,6 @@ jobs:
 
       - name: Run BeatFindr
         env:
-          PYTHONUNBUFFERED: '1'  # force immediate prints
           GOOGLE_CREDS_JSON: ${{ secrets.GOOGLE_CREDS_JSON }}
           SPREADSHEET_NAME:  ${{ secrets.SPREADSHEET_NAME }}
           GMAIL_USER:        ${{ secrets.GMAIL_USER }}
@@ -33,15 +32,7 @@ jobs:
           EMAIL_TO:          ${{ secrets.EMAIL_TO }}
         run: |
           echo "DEBUG: starting workflow run"
-          python - <<'PY'
-import os, sys
-print("DEBUG: Preflight")
-print("DEBUG: SPREADSHEET_NAME =", os.environ.get("SPREADSHEET_NAME"))
-print("DEBUG: GOOGLE_CREDS_JSON length =", len(os.environ.get("GOOGLE_CREDS_JSON","")))
-print("DEBUG: EMAIL_TO =", os.environ.get("EMAIL_TO"))
-print("DEBUG: GMAIL_USER =", os.environ.get("GMAIL_USER"))
-print("DEBUG: launching main.py")
-sys.stdout.flush()
-PY
+          echo "DEBUG: SPREADSHEET_NAME=${SPREADSHEET_NAME}"
+          echo "DEBUG: GMAIL_USER=${GMAIL_USER}"
           python main.py
           echo "DEBUG: main.py finished"
